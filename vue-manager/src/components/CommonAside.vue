@@ -1,7 +1,7 @@
 <template>
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" 
-        :collapse="isCollapse">
-        <h3>通用后台管理系统</h3>
+        :collapse="isCollapse()">
+        <h3>{{isCollapse()?'后台':'通用后台管理系统'}}</h3>
         <el-menu-item @click="MenuSelect(item)" v-for="item in noChildren" :index="item.path" :key="item.path">
             <i :class="'el-icon-'+item.icon"></i>
             <span slot="title">{{ item.label }}</span>
@@ -27,7 +27,7 @@ export default {
     name: 'CommonAside',
     data() {
         return {
-            isCollapse: false,
+           
             menu: [
                 {
                     path: '/',
@@ -78,6 +78,9 @@ export default {
             this.$router.push({
                 name:item.name
             })
+        },
+        isCollapse(){
+           return this.$store.state.isCollapse
         }
     },
     computed: {
@@ -87,8 +90,8 @@ export default {
         hasChildren() {
             return this.menu.filter(item => item.children)
         }
-    }
-
+    },
+    
 }
 </script>
   

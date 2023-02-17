@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="left-content">
-            <el-button icon="el-icon-menu" size="mini"></el-button>
+            <el-button  @click="handleCollapes" icon="el-icon-menu" size="mini"></el-button>
             <h3>首页</h3>
         </div>
         <div class="right-content">
@@ -12,7 +12,6 @@
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>黄金糕</el-dropdown-item>
                 <el-dropdown-item>狮子头</el-dropdown-item>
-                
             </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -25,6 +24,11 @@ export default {
     data(){
         return{
             userImage:require('../assets/1.jpg')
+        }
+    },
+    methods:{
+        handleCollapes(){
+            this.$store.commit('isCollapseMenu')
         }
     }
 }
