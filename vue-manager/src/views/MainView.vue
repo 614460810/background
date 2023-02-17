@@ -2,7 +2,9 @@
     <el-container >
         <el-aside width="auto"><CommonAside/></el-aside>
         <el-container>
-            <el-header>Header</el-header>
+            <el-header>
+                <CommonHeader/>
+            </el-header>
             <el-main>
                 <router-view></router-view>
             </el-main>
@@ -11,17 +13,19 @@
 </template>
 <script>
 import CommonAside from '../components/CommonAside.vue';
+import CommonHeader from '../components/CommonHeader.vue';
 export default {
     name: 'MainView',
     components:{
-        CommonAside
+        CommonAside,
+        CommonHeader
     }
 }
 
 </script>
 <style>
 .el-header{
-    background-color: #333;
+    background-color: gray;
 }
 
 </style>
