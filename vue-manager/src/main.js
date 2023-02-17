@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {Button,Container,Aside,Header,Main,Menu,Submenu,MenuItem,MenuItemGroup,Dropdown,DropdownItem,DropdownMenu} from 'element-ui'
+import {Button,Container,Aside,Header,Main,Menu,Submenu,MenuItem,MenuItemGroup,Dropdown,DropdownItem,DropdownMenu,Row,Col,Card,Table,TableColumn} from 'element-ui'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -17,8 +17,13 @@ Vue.config.productionTip = false
  Vue.use(Dropdown)
  Vue.use(DropdownItem)
  Vue.use(DropdownMenu)
+ Vue.use(Row)
+ Vue.use(Col)
+ Vue.use(Card)
+ Vue.use(Table)
+ Vue.use(TableColumn)
 
- 
+
 new Vue({
   router,
   store,
