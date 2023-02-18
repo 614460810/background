@@ -75,6 +75,7 @@ export default {
     },
     methods:{
         MenuSelect(item){
+            // console.log(item)
             this.$router.push({
                 name:item.name
             })
