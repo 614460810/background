@@ -30,12 +30,27 @@
         <el-button type="primary" @click="dialogVisible = true">+ 新增用户</el-button>
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="date" label="日期" width="180">
+            <el-table-column prop="name" label="名字">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="180">
+            <el-table-column prop="age" label="年龄">
             </el-table-column>
-            <el-table-column prop="address" label="地址">
+            <el-table-column prop="sex" label="性别">
+<!-- 通过 Scoped slot 可以获取到 row, column, $index 和 store（table 内部的状态管理）的数据 -->
+                <template slot-scope="scope">
+                    <span style="margin-left: 10px">{{ scope.row.sex===1 ? '男' :'女' }}</span>
+                </template>
             </el-table-column>
+            <el-table-column prop="birth" label="生日">
+            </el-table-column>
+            <el-table-column prop="addr" label="地址">
+            </el-table-column>
+            <el-table-column prop="addr" label="地址">
+                <template slot-scope="scope">
+                    <el-button @click="handleEdit(scope.row)">编辑</el-button>
+                    <el-button @click="handleDel(scope.row)" type="danger">删除</el-button>
+                </template>
+            </el-table-column>
+            
         </el-table>
     </div>
 </template>
@@ -78,7 +93,7 @@ export default {
                 }],
 
             },
-            tableData:[]
+            tableData: []
         };
     },
     methods: {
@@ -101,13 +116,21 @@ export default {
         },
         cancel() {
             this.handleClose()
+        },
+        handleEdit(){
+
+        },
+        handleDel(){
+
         }
+
     },
-    mounted(){
+    mounted() {
         // 获取列表数据
         getUser().then(({ data }) => {
-            
+
             console.log(data)
+            this.tableData = data.list
         })
     }
 }
