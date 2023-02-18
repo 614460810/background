@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="提示" :visible.sync="dialogVisible" width="50%">
+        <el-dialog title="提示" :visible.sync="dialogVisible" width="50%"  :before-close="handleClose">
             <el-form ref="form" :model="form" label-width="80px" :inline="true" :rules="rules">
                 <el-form-item label="姓名" prop="name">
                     <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
@@ -23,7 +23,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button @click="cancel">取 消</el-button>
                 <el-button type="primary" @click="submit">确 定</el-button>
             </span>
         </el-dialog>
@@ -72,7 +72,24 @@ export default {
     },
     methods:{
         submit(){
+            // 表单校验 返回一个值true false
+            this.$refs.form.validate(val=>{
+                console.log(val)
+                if(val){
+                    console.log(this.form)
+                    关闭表单
+                    this.dialogVisible=false
+                }
+            })
 
+        },
+        handleClose(){
+            重置表单内容
+            this.$refs.form.resetFields()
+            this.dialogVisible=false
+        },
+        cancel(){
+            this.handleClose()
         }
     }
 }
