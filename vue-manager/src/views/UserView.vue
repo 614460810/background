@@ -15,7 +15,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="出生日期" prop="birth">
-                    <el-date-picker v-model="form.birth" type="date" placeholder="选择日期">
+                    <el-date-picker v-model="form.birth" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="地址" prop="addr">
@@ -27,7 +27,7 @@
                 <el-button type="primary" @click="submit">确 定</el-button>
             </span>
         </el-dialog>
-        <el-button type="primary" @click="dialogVisible = true">+ 新增用户</el-button>
+        <el-button type="primary" @click="handleAdd">+ 新增用户</el-button>
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%">
             <el-table-column prop="name" label="名字">
@@ -35,9 +35,9 @@
             <el-table-column prop="age" label="年龄">
             </el-table-column>
             <el-table-column prop="sex" label="性别">
-<!-- 通过 Scoped slot 可以获取到 row, column, $index 和 store（table 内部的状态管理）的数据 -->
+                <!-- 通过 Scoped slot 可以获取到 row, column, $index 和 store（table 内部的状态管理）的数据 -->
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.sex===1 ? '男' :'女' }}</span>
+                    <span style="margin-left: 10px">{{ scope.row.sex === 1 ? '男' : '女' }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="birth" label="生日">
@@ -47,15 +47,15 @@
             <el-table-column prop="addr" label="地址">
                 <template slot-scope="scope">
                     <el-button @click="handleEdit(scope.row)">编辑</el-button>
-                    <el-button @click="handleDel(scope.row)" type="danger">删除</el-button>
+                    <el-button @click="handleDelete(scope.row)" type="danger">删除</el-button>
                 </template>
             </el-table-column>
-            
+
         </el-table>
     </div>
 </template>
 <script>
-import { getUser } from '../api'
+import { getUser, addUser, editUser ,delUser} from '../api'
 export default {
     name: 'UserView',
     data() {
@@ -93,7 +93,9 @@ export default {
                 }],
 
             },
-            tableData: []
+            tableData: [],
+            // 0新增 1编辑
+            modalType: 0
         };
     },
     methods: {
@@ -102,7 +104,16 @@ export default {
             this.$refs.form.validate(val => {
                 console.log(val)
                 if (val) {
-                    console.log(this.form)
+                    if (this.modalType === 0) {
+                        addUser(this.form).then(() => {
+                            this.getList();
+                        })
+                    } else {
+                        editUser(this.form).then(() => {
+                            this.getList();
+                        })
+                    }
+                    // console.log(this.form)
                     // 关闭表单
                     this.dialogVisible = false
                 }
@@ -117,21 +128,57 @@ export default {
         cancel() {
             this.handleClose()
         },
-        handleEdit(){
+        // 新增
+        handleAdd() {
+            this.modalType = 0;
+            this.dialogVisible = true
+        },
+        // 编辑
+        handleEdit(row) {
+            this.modalType = 1
+            this.dialogVisible = true
+            // 注意需要对当前行数据进行深拷贝，否则会出错
+            this.form = JSON.parse(JSON.stringify(row))
 
         },
-        handleDel(){
+        getList() {
+            getUser().then(({ data }) => {
 
-        }
+                // console.log(data)
+                this.tableData = data.list
+            })
+        },
+        // 删除
+        handleDelete(row) {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    delUser({ id: row.id }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        // 重新获取列表的接口
+                        this.getList()
+                    })
+                    
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+            });
+        },
+       
 
     },
     mounted() {
+        this.getList();
         // 获取列表数据
-        getUser().then(({ data }) => {
 
-            console.log(data)
-            this.tableData = data.list
-        })
+
     }
 }
 </script>
