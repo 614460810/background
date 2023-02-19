@@ -4,7 +4,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './api/mock'
-
+Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
 Vue.config.productionTip = false
  Vue.use(Button)
  Vue.use(Container)
