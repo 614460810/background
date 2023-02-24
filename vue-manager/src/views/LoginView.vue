@@ -13,38 +13,44 @@
     </el-form>
 </template>
 <script>
-// import Cookie from 'js-cookie'
+ import Cookie from 'js-cookie'
 // import Mock from 'mockjs'
 import { getMenu } from '../api'
-export default{
-    name:'LoginView',
-    data(){
-        return{
-            form:{
-                username:'',
-                password:''
+export default {
+    name: 'LoginView',
+    data() {
+        return {
+            form: {
+                username: '',
+                password: ''
             },
-            rules:{
-                username:{
+            rules: {
+                username: {
                     required: true, message: '请输入用户名', trigger: 'blur'
                 },
-                password:{
+                password: {
                     required: true, message: '请输入密码', trigger: 'blur'
                 },
             }
         }
     },
-    methods:{
-        submit(){
-            this.$refs.form.validate((valid) =>{
-                if(valid){
-                    getMenu(this.form).then(({data})=>{
-                console.log(data)
-            })
+    methods: {
+        submit() {
+            this.$refs.form.validate((valid) => {
+                if (valid) {
+                    getMenu(this.form).then(data => {
+                        console.log(data.data)
+                        if (data.data.code === 20000) {
+                            Cookie.set('token', data.data.token)
+                            this.$router.push('/home')
+                        }else {
+                            this.$message.error(data.data.message); 
+                        }
+                    })
                 }
             })
-          
-            // Cookie.set('token',token)
+
+            // 
             // this.$router.push('/home')
 
         }
@@ -53,20 +59,22 @@ export default{
 }
 </script>
 <style scoped>
-.login-container{
+.login-container {
     margin: 200px auto;
     width: 350px;
     border: 2px solid black;
     border-radius: 15px;
 }
-.login-container h3{
+
+.login-container h3 {
     text-align: center;
 }
-.login-container .el-input{
+
+.login-container .el-input {
     width: 250px;
 }
-.login-container .el-button{
-    margin-left:150px
-    /* margin: 0 auto; */
-}
-</style>
+
+.login-container .el-button {
+    margin-left: 150px
+        /* margin: 0 auto; */
+}</style>

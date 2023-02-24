@@ -5,13 +5,13 @@
             <h3>首页</h3>
         </div>
         <div class="right-content">
-            <el-dropdown trigger="click" size="mini">
+            <el-dropdown trigger="click" size="mini" @command="handleCommand">
             <span class="el-dropdown-link">
                 <img :src="userImage" >
             </span>
             <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>黄金糕</el-dropdown-item>
-                <el-dropdown-item>狮子头</el-dropdown-item>
+                <el-dropdown-item>个人信息</el-dropdown-item>
+                <el-dropdown-item command="logout">退出</el-dropdown-item>
             </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import Cookie from 'js-cookie'
 export default {
     name: 'CommonHeader',
     data(){
@@ -29,6 +30,12 @@ export default {
     methods:{
         handleCollapes(){
             this.$store.commit('isCollapseMenu')
+        },
+        handleCommand(command){
+            if(command==='logout'){
+                Cookie.remove('token')
+                this.$router.push('/login')
+            }
         }
     }
 }
